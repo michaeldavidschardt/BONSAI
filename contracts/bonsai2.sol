@@ -7,48 +7,51 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./base64.sol";
 
-//fix trait picking, fix colors
+//---FIX RARITY--------------
+//---CHANGE GREEN BGS--------
+//---ADD MORE LEAF COLORS----
 
 contract CryptoBonsai is ERC721Enumerable, Ownable {
 
     uint256 public maxSupply = 5000;
-    uint256 public price = 0.01 ether; //change to 0.025 for mint
+    uint256 public price = 0.03 ether; 
     uint256 public numTokensMinted;
-    uint256 public maxPerAddress = 100; //change to 20 for mint
-    uint256 public maxMint = 100; //change to 20 for mint
+    uint256 public maxPerAddress = 20; 
+    uint256 public maxMint = 20; 
 
-    // bool public allSalesPaused = true;
     bool public privateSaleIsActive = true;
-    //bool public founderMints = true;
-
+ 
     mapping(address => uint256) private _mintPerAddress;
     mapping(address => bool)    private _whiteList;
     mapping(address => uint256) private _whiteListPurchases;
     mapping(address => uint256) private _whiteListLimit;
     mapping(address => bool)    private _founderList;
-    //mapping(address => uint256) private _founderPurchases;
     mapping(address => uint256) private _founderLimit;
 
-    constructor() ERC721("BONSAIVERSE", "BNSI") Ownable() {}
+    constructor() ERC721("BONSAIALPHA", "BONSAI") Ownable() {}
 
-    string[7] private branchColors = ["#45283c","#663931","#b18354","#2b483f","#ab8db7","#ded7c6","#3f3e48"];
-    string[7] private branchColorNames = ["Manzanita","Brown","Light Brown","Dark Green","Lavender","Bone","Dark"];
-    string[5] private potColors = ["#663931","#6f252c","#2a2a71","#595652","#2e3d20"];
-    string[5] private potColorNames = ["Brown","Dark Red","Blue","Grey","Green"];
-    string[5] private soilColors = ["#2c2c64","#90765b","#557a33","#827672","#692c21"];
-    string[5] private soilColorNames = ["Blue Grass","Tan Pebbles","Grass","Dark","Red Clay"];
-    string[8] private leafColors = ["#A79AFF", "#FFABAB", "#E7FFAC", "#AFCBFF", "#7B9218", "#364511", "#39553F", "#C36F31"];
-    string[8] private leafColorNames = ["Lilac", "Coral", "Sage", "Ice Blue", "Fresh Green", "Forrest Green", "Evergreen Green", "Light Brown"];
-    string[39] private allColors = ["#EAFB00","#F0CF61","#0E38B1","#EF3E4A","#FEDAC2","#B0D8DC","#B6CAC0","#C02A1B","#1FC8A9","#C886A2","#F9BDBD","#FEDCCC","#EBB9D4","#F2CB6C","#FF8FA4","#343B3F","#FF89B5","#D1BDFF","#9A008A","#7B76A6","#FB5408","#0B64FE","#FAAD58","#FF8B8B","#F2F2F2","#FFD3C2","#FDB90B","#FCA59B","#CDCDD0"];
-    string[39] private allColorNames = ["Laser Lemon","Arylide Yellow","Egyptian Blue","Carmine Pink","Peach Puff","Pale Aqua","Powder Ash","Thunderbird","Topaz","Lipstick Pink","Tea Rose","Peach Schnapps","Pink Flare","Sand","Pink Sherbet","Tuna","Rosa","Melrose","Dark Magenta","Greyish Purple","International Orange","Bright Blue","Pale Orange","Geraldine","Porcelain","Light Aprico","Golden","Sweet Pink","Grey Goose"];
+    //---DELETE ROSE WATER BG-----
+    //---CHANGE SAGE LEAF COLOR---
+    //---DARKEN PERIWINKLE BG-----
+    //---MAKE BLUE WAVEY SHOW-----
+
+    string[8] private branchColors = ["#45283c","#663931","#b18354","#2b483f","#ab8db7","#ded7c6","#3f3e48","#914030"];
+    string[8] private branchColorNames = ["Manzanita","Oak","Juniper","Yew","Lavender","Birch","Dark","Padauk"];
+    string[8] private potColors = ["#663931","#6f252c","#2a2a71","#595652","#2e3d20",'#8a5303','#563c7d','#945332'];
+    string[8] private potColorNames = ['Brown','Dark Red','Blue','Grey','Green',"Honey",'Violet','Clay'];
+    string[8] private soilColors = ["#2c2c64","#90765b","#557a33","#827672","#7d483e","#769956","#685794","#82586f"];
+    string[8] private leafColors = ["#A79AFF","#FFABAB","#E7FFAC","#AFCBFF","#7B9218","#364511","#39553F","#C36F31"];
+    string[8] private leafColorNames = ["Lilac","Coral","Sage","Ice Blue","Fresh Green","Forrest Green","Evergreen Green","Light Brown"];
+    string[24] private colors = ['#F0CF61','#0E38B1','#EF3E4A','#FEDAC2','#B0D8DC','#C02A1B','#1FC8A9','#C886A2','#F9BDBD','#FEDCCC','#EBB9D4','#F2CB6C','#FF8FA4','#343B3F','#D1BDFF','#7B76A6','#FC6C2B','#0B64FE','#FF8B8B','#CDCDD0','#6A6AE6','#278A62','#81C272','#24872b'];
+    string[24] private colorNames = ['Pale Yellow','Vivid Blue','Dusty Red','Pale Peach','Sky Aqua','Deep Red','Minty','Lipstick','Rose Water','Cantaloupe','Flamingo','Sand','Watermelon','Midnight','Lavender','Stone','Orange','Mario Blue','Light Rose','Grey Goose','Periwinkle','Forester','Jade','Lime'];
     string[6] private bgAccessories = ['','<path d="M40 60h40v-20h50v20h100v20h-200zM30 230h40v20h-40zM380 250h40v-10h60v20h-100zM370 70h40v-20h30v10h20v10h10v10h10v10h-110z" fill="#cbdbfc"/><path d="M30 50h10v-10h20v10h10v-20h10v-10h10v-10h30v10h10v10h10v20h10v-10h20v10h10v10h10v-10h20v10h20v10h-60v-10h-40v-20h-50v20h-30v10h-10v10h-10zM350 70h20v-10h30v-10h10v-10h20v10h10v10h10v-10h10v10h10v10h10v10h10v10h-10v-10h-10v-10h-10v-10h-10v10h-10v-10h-10v-10h-10v10h-10v10h-40v10h-20zM40 220h10v10h20v10h10v10h-10v-10h-20v-10h-10zM390 250h20v-10h20v-10h20v10h-20v10h-20zM460 220h10v10h10v20h10v10h-10v-10h-10v-10h-10z" fill="#ffffff"/><path d="M10 80h10v-10h10v10h200v-10h20v10h10v10h-250zM20 240h10v10h60v10h-60v-10h-10zM370 260h60v-10h10v10h20v-10h10v10h30v10h-130M350 80h20v10h50v-10h10v10h20v-10h20v10h10v10h-120v-10h-10z" fill="#a6b4d2"/>','<path d="M0 180h20v-10h20v-10h20v-10h20v-10h20v-10h10v-10h20v-10h20v-10h10v-10h10v-10h20v-10h10v-10h10v-10h10v-10h20v-10h30v10h10v10h10v10h20v10h10v10h10v10h10v10h10v10h20v10h20v10h10v10h10v10h10v10h20v10h20v10h20v10h20v160h-500z" fill="#5b6ee1"/><path d="M130 110h20v-10h10v-10h10v-10h20v-10h10v-10h10v-10h10v-10h20v-10h30v10h10v10h10v10h20v10h10v10h10v10h10v10h10v10h20v10h20v10h-20v-10h-40v-10h-20v-10h-10v10h-10v10h-20v-10h-10v-10h-10v-10h-20v10h-20v-10h-20v10h-30v10h-10v10h-20z" fill="#cbdbfc"/><path d="M220 70h10v-10h10v-10h20v10h-10v10h-10v10h-20zM260 80h10v10h10v10h-10v-10h-10zM270 50h10v10h10v10h10v10h-10v-10h-10v-10h-10z" fill="#5b6ee1"/><path d="M0 290h10v-10h20v-10h20v-10h10v-10h30v10h10v10h20v10h10v10h10v10h10v-10h10v-10h10v-10h20v-10h20v10h20v10h10v10h70v-10h20v-10h20v-10h20v10h20v10h20v10h20v10h10v-10h10v-10h10v-10h10v-10h20v10h10v80h-500" fill="#3f3f74"/>','<path d="M0 100h50v10h-50zM60 90h30v30h-30zM100 100h30v10h-30zM140 100h10v10h-10zM70 130h10v40h-10zM70 40h10v40h-10zM100 80h10v-10h10v-10h10v-10h20v-10h30v-10h50v-10h70v10h50v10h40v10h30v10h20v10h20v10h20v10h10v10h10v10h-10v-10h-10v-10h-20v-10h-20v-10h-20v-10h-30v-10h-40v-10h-50v-10h-70v10h-50v10h-30v10h-20v10h-10v10h-10v10h-10z" fill="#ffffff"/><path d="M100 90h10v-10h10v-10h10v-10h20v-10h30v-10h50v-10h70v10h50v10h40v10h30v10h20v10h20v10h20v10h10v10h10v10h-10v-10h-10v-10h-20v-10h-20v-10h-20v-10h-30v-10h-40v-10h-50v-10h-70v10h-50v10h-30v10h-20v10h-10v10h-10v10h-10zM40 70h10v10h10v10h-10v10h10v10h-10v10h10v10h-10v10h-10v-10h10v-10h-10v-10h10v-10h-10v-10h10v-10h-10M60 70h10v10h10v-10h10v10h10v-10h10v10h-10v10h-10v-10h-10v10h-10v-10h-10zM90 100h10v10h10v10h-10v10h10v10h-10v-10h-10v-10h10v-10h-10zM60 130h10v-10h10v10h10v10h-10v-10h-10v10h-10z" fill="#cbdbfc"/>','<path d="m130 90h10v-10h20v-10h20v-10h20v-10h100v10h20v10h20v10h20v10h10v10h-240z" fill="#ffbc00"/><path d="m110 110h280v10h10v20h-300v-20h10zM90 150h320v10h10v20h-340v-20h10z" fill-opacity=".85" fill="#ffbc00"/><path d="m70 190h360v30h-360zM70 230h360v20h-360z" fill-opacity=".70" fill="#ffbc00"/><path d="m80 260h340v20h-340zM90 290h320v10h-320z" fill-opacity=".55" fill="#ffbc00"/><path d="m100 310h300v10h-300zM110 330h280v10h-280z" fill-opacity=".4" fill="#ffbc00"/>', '<path d="M20 100h20v-20h10v20h20v10h-20v20h-10v-20h-20zM50 290h10v-10h10v-10h10v10h10v10h10v10h-10v10h-10v10h-10v-10h-10v-10h-10zM150 50h10v-10h10v-20h10v20h10v10h20v10h-20v10h-10v20h-10v-20h-10v-10h-20v-10zM430 190h10v-10h10v-10h10v10h10v10h10v10h-10v10h-10v10h-10v-10h-10v-10h-10zM390 280h10v-10h10v-20h10v20h10v10h20v10h-20v10h-10v20h-10v-20h-10v-10h-20v-10zM390 20h40v110h-40v-10h10v-10h10v-10h10v-50h-10v-10h-10v-10h-10zM50 220h10v10h-10zM20 160h10v10h-10zM100 100h10v10h-10zM260 40h10v10h-10zM330 80h10v10h-10zM50 20h10v10h-10zM460 320h10v10h-10z" fill-opacity="0.6" fill="#ffffff"/><path d="M30 100h10v-10h10v10h10v10h-10v10h-10v-10h-10zM60 290h10v-10h10v10h10v10h-10v10h-10v-10h-10zM160 50h10v-10h10v10h10v10h-10v10h-10v-10h-10zM440 190h10v-10h10v10h10v10h-10v10h-10v-10h-10zM400 280h10v-10h10v10h10v10h-10v10h-10v-10h-10zM400 20h50v10h10v10h10v10h10v50h-10v10h-10v10h-10v10h-50v-10h10v-10h10v-10h10v-50h-10v-10h-10v-10h-10z" fill="#ffffff"/>'];
-    string[6] private bgAccessoriesNames = ['','Clouds','Mt. Fuji','Comet','Sun', 'Stars'];
+    string[6] private bgAccessoriesNames = ['','Clouds','Mt. Fuji','Comet','Sun','Stars'];
     string[6] private fgAccessories = ['','<path d="M0 350h500v150h-500z" fill="#714835"/><path d="M0 360h20v20h-10v20h-10zM30 360h360v20h10v20h-380v-20h10zM400 360h100v40h-90v-20h-10zM0 410h80v30h-10v20h-70zM90 410h380v30h10v20h-400v-20h10zM480 410h20v50h-10v-20h-10zM0 470h170v20h-10v10h-160zM180 470h240v20h10v10h-260v-10h10zM430 470h70v30h-60v-10h-10z" fill="#aa7459"/><path d="M10 360h10v20h-10v20h-10v-20h10zM40 360h80v10h-80zM380 360h10v20h10v20h-10v-20h-10zM410 360h90v10h-90zM0 410h80v30h-10v20h-10v-20h10v-20h-70zM100 410h370v30h10v20h-10v-20h-10v-20h-360zM490 410h10v10h-10zM0 470h170v20h-10v10h-10v-10h10v-10h-160M190 470h230v20h10v10h-10v-10h-10v-10h-220zM440 470h60v10h-60z" fill="#bb8166"/><path d="M30 360h10v20h-10v10h60v-10h20v10h10v10h-100v-20h10zM50 370h20v10h-20zM400 360h10v20h10v10h20v-10h20v10h40v10h-90v-20h-10zM380 390h10v10h-10zM480 370h20v10h-20zM0 450h60v10h-60zM10 430h40v10h-40zM90 410h10v30h-10v10h380v10h-390v-20h10zM110 430h30v10h-30zM370 430h80v10h-80zM480 410h10v30h10v20h-10v-20h-10zM0 480h50v10h-50zM80 490h50v10h-50zM180 470h10v20h-10v20h-10v-20h10zM200 490h30v10h-30zM250 480h80v10h-80zM430 470h10v20h10v10h-10v-10h-10M460 490h30v10h-30z" fill="#93654e"/>','<path d="M0 350h500v150h-500z" fill="#639bff"/><path d="M0 370h70v10h-70zM60 400h40v10h-40zM0 440h40v10h-40zM60 460h20v10h-20zM0 480h40v10h-40zM70 480h360v10h-360zM430 360h70v10h-70zM410 390h60v10h-60zM440 430h40v10h-40zM430 460h40v10h-40zM480 480h20v10h-20z" fill="#5b6ee1"/><path d="M100 340h300v30h10v40h10v40h10v30h-360v-30h10v-40h10v-40h10z" fill="#eec39a"/><path d="M100 360h300v10h-300zM90 390h320v20h-320zM80 430h340v20h-340zM70 470h360v10h-360z" fill="#d9a066"/><path d="M130 410h10v40h-10v30h-20v-30h10v-30h10zM240 440h20v40h-20zM360 410h10v10h10v30h10v30h-20v-30h-10z" fill="#a4794e"/>','<path d="M0 350h20v-10h20v-10h60v10h20v10h250v-20h50v10h30v10h30v-10h10v-10h10v170h-500z" fill="#d9a066"/> <path d="M0 350h20v-10h20v-10h30v10h-10v10h-10v10h-20v10h-20v10h-10zM0 430h20v-10h10v-10h40v10h10v10h10v10h10v10h-10v-10h-10v-10h-10v-10h-20v10h-10v10h-40zM90 480h20v-10h20v-10h40v10h20v10h20v10h-20v-10h-20v-10h-20v10h-20v10h-40zM350 480h20v-10h30v10h10v10h-10v-10h-20v10h-30zM350 440h20v-10h20v-10h30v-10h40v10h20v10h20v10h-20v-10h-20v-10h-20v10h-30v10h-20v10h-40zM170 440h160v10h-160zM450 360h20v-10h10v-10h10v-10h10v20h-10v10h-20v10h-20zM370 330h30v10h-10v10h-10v-10h-10z" fill="#b17d48"/>','<path d="M70 360h360v10h-20v10h20v10h-20v10h30v10h-20v10h20v10h-20v10h30v10h-20v10h20v10h-20v10h30v10h-420v-10h30v-10h-20v-10h20v-10h-20v-10h30v-10h-20v-10h20v-10h-20v-10h30v-10h-20v-10h20v-10h-20z" fill="#f4dcc5"/><path d="M100 370h300v30h10v40h10v40h-340v-40h10v-40h10z" fill="#ac3232"/><path d="M110 380h10v30h-10zM380 380h10v30h-10zM100 410h10v40h-10zM390 410h10v40h-10zM90 450h10v10h300v-10h10v20h-320z" fill="#df7126"/><path d="M130 410h10v10h-10zM360 410h10v10h-10zM120 420h10v20h240v-20h10v30h-260z" fill="#3f3f74"/>', '<path d="M30 350h30v10h-10v10h40v10h-10v10h-10v10h40v10h-10v20h-10v10h40v20h-10v20h-10v10h50v10h-50v-10h-50v-10h10v-20h10v-10h10v-10h-40v-10h10v-20h10v-10h-40v-10h10v-10h10v-10h-30v-10h10zM0 370h20v10h-10v10h-10zM0 400h30v10h-10v10h-10v20h-10zM0 450h10v-10h40v10h-10v10h-10v10h-10v20h-20zM20 490h40v10h-40zM100 350h20v20h-30v-10h10zM110 390h10v10h-10zM130 430 h10v-10h10v10h10v10h-30zM110 490h50v-30h10v-20h50v10h-10v40h50v-50h40v10h10v40h50v-30h-10v-20h-10v-10h10v10h50v20h10v20h10v10h50v-10h-10v-10h-10v-20h-10v-10h40v10h10v10h10v30h-30v10h-50v-10h-60v10h-50v-10h-50v10h-50v-10zM380 400h40v-10h-10v-10h-10v-10h-20v-20h10v10h10v10h30v-10h-10v-10h30v10h10v10h-30v10h10v10h10v10h-30v10h10v20h10v10h-40v-10h-10v-20h-10zM450 400h30v-10h-10v-10h-10v-10h30v-10h-10v-10h20v20h-10v10h10v20h-20v10h10v10h10v20h-20v-10h-10v-10h-10v-10h-10z" fill="#ffffff"/>'];
     string[6] private fgAccessoriesNames = ['','Hardwood Floor','Bamboo Raft','Sand Dunes','Rug', 'Checkered Floor'];
     string[9] private accessories = ['','<path d="M140 130 h10v-10h10v10h10v30h-10v10h-10v-10h-10zM120 230 h10v-10h10v10h10v30h-10v10h-10v-10h-10zM180 190 h10v-10h10v10h10v30h-10v10h-10v-10h-10zM270 160 h10v-10h10v10h10v30h-10v10h-10v-10h-10zM360 170 h10v-10h10v10h10v30h-10v10h-10v-10h-10zM340 240 h10v-10h10v10h10v30h-10v10h-10v-10h-10z" fill="#fbf236"/><path d="M150 120h10v10h10v30h-10v10h-10v-10h10v-30h-10zM130 220h10v10h10v30h-10v10h-10v-10h10v-30h-10zM190 180h10v10h10v30h-10v10h-10v-10h10v-30h-10zM280 150h10v10h10v30h-10v10h-10v-10h10v-30h-10zM370 160h10v10h10v30h-10v10h-10v-10h10v-30h-10zM350 230h10v10h10v30h-10v10h-10v-10h10v-30h-10z" fill="#c1b918"/>','<path d="M220 80h80v50h-80z" fill="#c8a98c"/><path d="M210 80h30v10h-10v10h-10v10h-10z M280 80h30v30h-10v-10h-10v-10h-10zM250 110h20v10h10v20h-40v-20h10z" fill="#433431"/><path d="M250 140h20v10h-20z" fill="#d85780"/><path d="M250 120h20v-20h10v20h-10v10h-20zM230 100h10v20h-10z" fill="#222034"/><path d="M240 100h10v20h-10zM280 100h10v20h-10z" fill="#ffffff"/>','<path d="M180 220h30v-20h60v20h10v-20h60v60h-60v-30h-10v30h-60v-30h-20v20h-10z" fill="#639bff"/> <path d="M220 210h20v40h-20zM290 210h20v40h-20z" fill="#ffffff"/> <path d="M240 210h20v40h-20zM310 210h20v40h-20z" fill="#000000"/>','<path d="M200 60h10v10h10v20h10v10h10v-10h10v-20h10v-10h10v10h10v20h10v10h10v-10h10v-20h10v-10h10v70h-10v20h-10v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-30h-20v20h-20z" fill="#76428a"/><path d="M200 60h10v50h10v20h-20zM230 100h10v10h-10zM240 90h10v10h-10zM250 70h10v20h-10zM290 100h10v10h-10zM300 90h10v10h-10zM310 70h10v20h-10zM240 130h40v10h-10v10h-20v10h-10zM300 130h20v20h-10v-10h-10z" fill-opacity="0.15" fill="#000000"/>','<path d="M150 200h240v20h-10v10h-10v10h-10v10h-60v-10h-10v-10h-10v-10h-20v10h-10v10h-10v10h-60v-10h-10v-10h-10v-10h-10z" fill="#222034"/><path d="M200 230h10v-10h10v-10h10v10h-10v10h-10v10h-10zM220 230h10v-10h10v-10h10v10h-10v10h-10v10h-10zM320 230h10v-10h10v-10h10v10h-10v10h-10v10h-10zM340 230h10v-10h10v-10h10v10h-10v10h-10v10h-10z" fill="#ffffff"/>','<path d="M200 110h10v-10h50v-30h40v60h-20v10h-10v10h-20v-10h-10v-30h-20v20h-10v-10h-10z" fill="#ffffff"/> <path d="M250 50h10v10h10v10h-10v10h-10z" fill="#dc3636"/> <path d="M270 80h10v10h-10zM290 80h10v10h-10z" fill="#000000"/> <path d="M300 90h20v10h-10v10h-10z" fill="#d9a066"/>', '<path d="m110 140h10v-10h20v-10h20v-10h20v-10h20v-10h20v-10h20v-10h20v10h20v10h20v10h20v10h20v10h20v10h20v10h10v10h-280z" fill="#b5895c"/><path d="m180 120h10v10h10v-10h10v-10h-10v-10h10v10h10v-10h10v-10h10v-10h10v-10h10v10h20v10h20v10h20v10h20v10h20v20h-40v-10h20v-10h-20v10h-20v10h-70v-10h-20v10h-20v-10h-10v10h-20v-10h20z" fill="#d9a066"/><path d="m240 100h20v-10h20v10h-20v10h-20zM260 120h20v-10h20v10h-20v10h-20z" fill="#b5895c"/><path d="m110 150h270v10h-270z" fill-opacity="0.3" fill="#000000"/>', '<path d="M110 240h10v40h-10zM110 300h10v40h-10zM160 260h10v40h-10zM110 300h10v40h-10zM210 230h10v40h-10zM320 270h10v40h-10zM380 230h10v40h-10zM380 290h10v40h-10z" fill="#9d97a0"/> <path d="M120 230h10v10h10v10h-20zM120 270h20v10h-20zM120 290h10v10h10v10h-20zM120 330h20v10h-20zM120 350h10v10h-10z M170 250h10v10h10v10h-20zM330 300h20v10h-20zM330 320h10v10h-10zM330 260h10v10h10v10h-20zM220 260h20v10h-20zM220 280h10v10h-10zM220 220h10v10h10v10h-20zM170 290h20v10h-20zM170 310h10v10h-10zM390 220h10v10h10v10h-20zM390 260h20v10h-20zM390 280h10v10h10v10h-20zM390 320h20v10h-20zM390 340h10v10h-10z" fill="#847e87"/> <path d="M130 250h10v20h-10zM120 280h10v10h-10zM130 310h10v20h-10zM120 340h10v10h-10z M180 270h10v20h-10zM170 300h10v10h-10zM170 240h10v10h-10zM220 210h10v10h-10zM230 240h10v20h-10zM220 270h10v10h-10zM330 250h10v10h-10zM340 280h10v20h-10zM330 310h10v10h-10zM390 210h10v10h-10zM400 240h10v20h-10zM390 270h10v10h-10zM400 300h10v20h-10zM390 330h10v10h-10z" fill="#696a6a"/>'];
     string[9] private accessoriesNames = ['','Lemons','Nellie','Noun Glasses','Purple Party Hat','Deal With It','Chicken Fren', 'Rice Hat', 'chains'];
     string[5] private potAccessories = ['','<path d="M140 360h10v30h10v-10h10v10h10v-30h10v30h-10v10h-10v-10h-10v10h-10v-10h-10zM200 380h10v-10h10v10h10v10h-10v-10h-10v10h-10zM200 390h30v20h-10v-10h-10v10h-10zM240 380h10v-10h20v10h-20v20h10v-10h20v10h-10v10h-20v-10h-10zM290 380h10v-10h10v10h10v-10h10v10h10v30h-10v-30h-10v10h-10v-10h-10v30h-10zM350 360h10v40h-10z" fill-opacity="0.4" fill="#ffffff"/>','<path d="M140 390h10v10h10v10h10v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h10v-10h10v-10h10v10h-10v10h-10v10h-10v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-10v-10h-10v-10h-10z" fill="#222034"/><path d="M140 380h10v10h10v10h10v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h10v-10h10v-10h10v10h-10v10h-10v10h-10v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-10v-10h-10v-10h-10z" fill="#d25c0b"/><path d="M140 370h10v10h10v10h10v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h10v-10h10v-10h10v10h-10v10h-10v10h-10v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-10v-10h-10v-10h-10zM130 380h10v10h-10zM360 380h10v10h-10z" fill="#fbb236"/>','<path d="M140 390h10v10h10v10h10v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h10v-10h10v-10h10v10h-10v10h-10v10h-10v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-10v-10h-10v-10h-10z" fill="#222034"/><path d="M140 380h10v10h10v10h10v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h10v-10h10v-10h10v10h-10v10h-10v10h-10v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-10v-10h-10v-10h-10z" fill="#d25c0b"/><path d="M140 370h10v10h10v10h10v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h20v-10h10v-10h20v10h10v10h10v-10h10v-10h10v10h-10v10h-10v10h-10v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-20v-10h-10v-10h-20v10h-10v10h-10v-10h-10v-10h-10zM130 380h10v10h-10zM360 380h10v10h-10z" fill="#fbb236"/>','<path d="M160 300h70v10h-20v10h-10v10h10v10h10v10h60v-10h10v-10h10v-10h-10v-10h-10v-10h60v10h20v10h10v10h10v10h10v20h-10v50h10v20h-10v10h-10v10h-20v10h-30v10h-140v-10h-30v-10h-20v-10h-10v-10h-10v-20h10v-50h-10v-20h10v-10h10v-10h10v-10h20z" fill="#dd8e36"/><path d="M110 340h10v-10h10v-10h10v-10h20v-10h30v10h-10v10h-20v10h-10v20h10v10h20v10h30v10h110v10h-140v-10h-30v-10h-20v-10h-20zM110 410h20v10h20v10h30v10h120v10h-120v-10h-30v-10h-20v-10h-10v10h10v10h20v10h30v10h140v10h-140v-10h-30v-10h-20v-10h-10v-10h-10zM210 300h20v10h-20v10h-10v10h10v10h10v10h60v-10h10v-10h10v-10h-10v-10h-10v-10h10v10h10v10h10v10h-10v10h-10v10h-10v10h-60v-10h-10v-10h-10v-10h-10v-10h10v-10h10z" fill="#d27207"/><path d="M120 360h10v10h20v10h30v10h140v-10h30v-10h20v-10h10v10h-10v10h-20v10h-30v10h-140v-10h-30v-10h-20v-10h-10z" fill="#dd2323"/><path d="M120 380h10v10h20v10h30v10h140v-10h30v-10h20v-10h10v20h-10v10h-20v10h-30v10h-140v-10h-30v-10h-20v-10h-10z" fill="#663931"/><path d="M120 370h10v10h20v10h30v10h140v-10h30v-10h20v-10h10v10h-10v10h-20v20h-10v-10h-20v10h-10v10h-10v-10h-50v10h-20v-10h-20v10h-10v-10h-20v-10h-10v10h-10v-10h-10v-10h-20v-10h-10z" fill="#f9be57"/><path d="M120 400h10v10h20v10h30v10h140v-10h30v-10h20v-10h10v10h-10v10h-20v10h-30v10h-140v-10h-30v-10h-20v-10h-10z" fill="#6abe30"/><path d="M160 330h10v10h-10zM190 300h10v10h-10zM180 350h10v10h-10zM200 340h10v10h-10zM220 370h10v10h-10zM250 360h10v10h-10zM290 370h10v10h-10zM300 340h10v10h-10zM330 360h10v10h-10zM360 340h10v10h-10zM340 320h10v10h-10zM310 300h10v10h-10z" fill="#eec39a"/>'];
-    string[5] private potAccessoriesNames = ['','WAGMI Light','Wavey Blue','Wavey Orange','Borgor'];
+    string[5] private potAccessoriesNames = ['','WAGMI','Wavey Blue','Wavey Orange','Borgor'];
 
     struct cryptoBonsai {
         uint256 berryColor;
@@ -56,7 +59,6 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
         uint256 backgroundColor;
         uint256 potColor;
         uint256 branchColor;
-        //uint256 soilColor;
         uint256 bgAccessories;
         uint256 fgAccessories;
         uint256 accessories;
@@ -68,7 +70,6 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
 
         bonsai.berryColor = getAColor(tokenId, "FLOWER");
         bonsai.leafColor = getLeafColor(tokenId, "LEAF");
-        //bonsai.soilColor = getSoilColor(tokenId, "SOIL");
         bonsai.branchColor = getBranchColor(tokenId, "BRANCH");
         bonsai.backgroundColor = getAColor(tokenId, "BGC");
         bonsai.potColor = getPotColor(tokenId, "POT");
@@ -84,9 +85,9 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
         string[20] memory parts;
         
         parts[0] = ', "attributes": [{"trait_type": "Background Color","value": "';
-        parts[1] = allColorNames[bonsai.backgroundColor];
+        parts[1] = colorNames[bonsai.backgroundColor];
         parts[2] = '"}, {"trait_type": "Flowers","value": "';
-        parts[3] = allColorNames[bonsai.berryColor];
+        parts[3] = colorNames[bonsai.berryColor];
         parts[5] = '"}, {"trait_type": "Leaf Color","value": "';
         parts[6] = leafColorNames[bonsai.leafColor];
         parts[7] = '"}, {"trait_type": "Branch","value": "';
@@ -121,23 +122,19 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
     }
     
     function getAColor(uint256 tokenId, string memory seed) internal view returns (uint256) {
-        return getNum(tokenId, seed, 0, 10);
+        return getNum(tokenId, seed, 0, 23);
     }
 
     function getPotColor(uint256 tokenId, string memory seed) internal view returns (uint256) {
-        return getNum(tokenId, seed, 0, 4);
+        return getNum(tokenId, seed, 0, 7);
     }
 
-    // function getSoilColor(uint256 tokenId, string memory seed) internal view returns (uint256) {
-    //     return getNum(tokenId, seed, 0, 3);
-    // }
-
     function getBranchColor(uint256 tokenId, string memory seed) internal view returns (uint256) {
-        return getNum(tokenId, seed, 0, 5);
+        return getNum(tokenId, seed, 0, 7);
     }
 
     function getLeafColor(uint256 tokenId, string memory seed) internal view returns (uint256) {
-        return getNum(tokenId, seed, 0, 6);
+        return getNum(tokenId, seed, 0, 7);
     }
     
     function getFgAcc(uint256 tokenId) internal pure returns (uint256) {
@@ -179,6 +176,7 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
         if (gt > 50 && gt <= 60) { potAcc = 1; }
         if (gt > 61 && gt <= 70) { potAcc = 2; }
         if (gt > 71 && gt <= 80) { potAcc = 3; }
+        if (gt > 81 && gt <= 90) { potAcc = 4; }
 
         return potAcc;
     }
@@ -197,14 +195,13 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
         return BgAcc;
     }
     
-    /* SVG BUILDING FUNCTIONS */
-
+    /* IMAGE BUILDING FUNCTIONS */
     function getBonsaiSVG(cryptoBonsai memory bonsai) internal view returns (string memory) {
         string[25] memory parts;
 
         parts[0] = '<svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">';
         parts[1] = '<path d="M0 0h500v500h-500z" fill="';
-        parts[2] = allColors[bonsai.backgroundColor];
+        parts[2] = colors[bonsai.backgroundColor];
         parts[3] = '"/>';
         parts[4] = '<path d="M0 350h500v150h-500z" fill="#222034"/>';
         parts[5] = bgAccessories[bonsai.bgAccessories];
@@ -213,7 +210,7 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
         parts[8] = leafColors[bonsai.leafColor];
         parts[9] = '"/><path d="M170 110h10v10h-10zM180 120h10v10h-10zM160 120h10v10h-10zM150 130h10v10h-10zM130 130h10v10h-10zM170 130h10v10h-10zM200 130h10v10h-10zM230 130h10v10h-10zM240 140h10v10h-10zM250 150h10v10h-10zM310 150h10v10h-10zM300 140h10v10h-10zM290 130h10v10h-10zM320 140h10v10h-10zM330 160h10v10h-10zM340 150h10v10h-10zM360 150h20v10h-20zM380 160h10v10h-10zM390 170h10v10h-10zM400 180h10v10h-10zM390 190h10v10h-10z" fill-opacity="0.15" fill="#ffffff"/><path d="M110 140h10v20h-10zM100 160h10v10h-10zM110 170h10v10h-10zM120 180h10v10h-10zM130 190h10v10h-10zM110 200h20v10h-20zM100 210h10v10h20v10h-10v10h-10v-10h-10zM130 230h20v10h10v10h-20v-10h-10zM180 240h10v10h-10zM170 230h10v10h-10zM160 220h10v10h-10zM150 210h10v10h-10zM160 200h10v10h-10zM150 190h10v10h-10zM170 210h10v10h-10zM180 220h10v10h-10zM190 210h10v10h-10zM200 200h10v10h-10zM210 210h10v20h-10zM200 230h10v10h-10zM190 180h10v10h-10zM180 170h10v10h-10zM150 160h10v10h-10zM140 150h10v10h-10zM180 150h10v10h-10zM170 140h10v10h-10zM210 160h10v10h-10zM230 170h10v10h-10zM240 180h10v10h-10zM250 170h10v10h-10zM260 180h10v10h-10zM270 190h10v10h-10zM280 200h10v10h-10zM290 190h10v10h-10zM300 200h10v10h-10zM310 190h10v10h-10zM280 170h10v10h-10zM270 160h10v10h-10zM350 180h10v10h-10zM360 190h10v10h-10zM350 200h10v10h-10zM340 210h10v10h-10zM320 220h10v10h10v20h-20zM360 220h20v10h-20zM380 210h10v10h-10zM160 170h10v10h-10z" fill-opacity="0.2" fill="#000000"/>'; //leaf base
         parts[10] = '<path d="M120 150h10v10h10v10h-20zM120 210h20v20h-10v-10h-10zM180 190h20v10h-10v10h-10zM160 160h10v-10h10v20h-20zM180 130h20v20h-10v-10h-10zM220   110h20v20h-10v-10h-10zM220 160h10v-10h10v20h-20zM280 150h10v10h10v10h-20zM300 180h10v-10h10v20h-20zM320 130h20v20h-10v-10h-10zM360 170h20v20h-10v-10h-10zM350 230h10v20h-20v-10h10z" fill="';
-        parts[11] = allColors[bonsai.berryColor];
+        parts[11] = colors[bonsai.berryColor];
         parts[12] = '"/> <path d="M130 210h10v10h-10zM170 150h10v10h-10zM190 130h10v10h-10zM230 110h10v10h-10zM230 150h10v10h-10zM310 170h10v10h-10zM330 130h10v10h-10zM370 170h10v10h-10z" fill-opacity="0.25" fill="#ffffff"/> <path d="M120 160h10v10h-10zM130 220h10v10h-10zM180 200h10v10h-10zM160 160h10v10h-10zM220 160h10v10h-10zM280 160h10v10h-10zM340 240h10v10h-10z" fill-opacity="0.2" fill="#000000"/>';//berry shadows
         parts[13] = '<path d="M160 300h180v10h10v10h10v10h10v10h10v60h-10v10h-10v10h-10v10h-10v10h-180v-10h-10v-10h-10v-10h-10v-10h-10v-60h10v-10h10v-10h10v-10h10z" fill="';
         parts[14] = potColors[bonsai.potColor];
@@ -271,18 +268,7 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
         }
     }
 
-    // function whitelistInfoFor(address _addr) public view returns (bool isWhiteListed, uint256 numHasMinted, uint256 allottedMints) {
-    //     // isWhiteListed = _whiteList[_addr];
-    //     // numHasMinted = _whiteListPurchases[_addr];
-    //     // allottedMints = _whiteListLimit[_addr];
-    // }
-
-    // function mintedInfoFor(address _addr) public view returns (uint256 numHasMinted) {
-    //     numHasMinted = _mintPerAddress[_addr];
-    // }
-
     function mint(address destination, uint256 amountOfTokens) private {
-        //require(!allSalesPaused, "Sale is paused right now");
         require(totalSupply() < maxSupply, "All tokens have been minted");
         require(totalSupply() + amountOfTokens <= maxSupply, "Minting would exceed max supply");
         require(amountOfTokens > 0, "Must mint at least one token");
@@ -296,19 +282,6 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
             _whiteListPurchases[msg.sender] = _whiteListPurchases[msg.sender] + amountOfTokens;
         }
 
-        // if(founderMints) {
-        //     require(_founderList[msg.sender], "Buyer is not a founder");
-        //     require(_founderPurchases[msg.sender] + amountOfTokens <= _founderLimit[msg.sender]);
-        //     _founderPurchases[msg.sender] = _founderPurchases[msg.sender] + amountOfTokens;
-        //     price = 0 ether;
-        //     maxMint = _founderLimit[msg.sender];
-        //     maxPerAddress = _founderLimit[msg.sender];
-        // } else {
-        //     price = 0.01 ether;
-        //     maxMint = 100;
-        //     maxPerAddress = 100;
-        // }
-
         for (uint256 i = 0; i < amountOfTokens; i++) {
             uint256 tokenId = numTokensMinted + 1;
             _safeMint(destination, tokenId);
@@ -318,19 +291,11 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
     }
 
     function founderMint(uint256 amountOfTokens) public {
-        //require(founderMints);
         require(_founderList[msg.sender], "Buyer is not a founder");
         require(totalSupply() < maxSupply, "All tokens have been minted");
         require(totalSupply() + amountOfTokens <= maxSupply, "Minting would exceed max supply");
         require(amountOfTokens > 0, "Must mint at least one token");
-        require(_mintPerAddress[msg.sender] + amountOfTokens <= _founderLimit[msg.sender],  "You can't exceed this wallet's minting limit");
-        require(amountOfTokens <= _founderLimit[msg.sender], "Cannot purchase this many tokens in a transaction");
-
-        // if(founderMints) {
-        //     require(_founderList[msg.sender], "Buyer is not a founder");
-        //     require(_founderPurchases[msg.sender] + amountOfTokens <= _founderLimit[msg.sender]);
-        //     _founderPurchases[msg.sender] = _founderPurchases[msg.sender] + amountOfTokens;
-        // } 
+        require(amountOfTokens <= _founderLimit[msg.sender], "Cannot purchase this many tokens in a transaction"); 
 
         for (uint256 i = 0; i < amountOfTokens; i++) {
             uint256 tokenId = numTokensMinted + 1;
@@ -343,10 +308,6 @@ contract CryptoBonsai is ERC721Enumerable, Ownable {
     function mintBonsai(uint256 amountOfTokens) public payable virtual {
         mint(_msgSender(),amountOfTokens);
     }
-
-    // function toggleAllSalesPaused() public onlyOwner {
-    //     allSalesPaused = !allSalesPaused;
-    // }
 
     function enablePublicSale() public onlyOwner {
         privateSaleIsActive = false;
